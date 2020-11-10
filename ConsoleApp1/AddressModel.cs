@@ -92,7 +92,7 @@ namespace AddressBookLinq
         /// <param name="name"></param>
         public void DeleteContact(string name)
         {
-            var deleteRow = dataTable.AsEnumerable().Where(a => a.Field<string>("FirstName").Equals(name)).FirstOrDefault();
+            var deleteRow = dataTable.AsEnumerable().Where(x => x.Field<string>("FirstName").Equals(name)).FirstOrDefault();
             if (deleteRow != null)
             {
                 deleteRow.Delete();
@@ -105,12 +105,12 @@ namespace AddressBookLinq
         /// <param name="city"></param>
         public void RetrieveContactsByCity(string city)
         {
-            var cityResults = dataTable.AsEnumerable().Where(dr => dr.Field<string>("City") == city);
+            var cityResults = dataTable.AsEnumerable().Where(x => x.Field<string>("City") == city);
             foreach (DataRow row in cityResults)
             {
-                foreach (DataColumn col in dataTable.Columns)
+                foreach (DataColumn column in dataTable.Columns)
                 {
-                    Console.Write(row[col] + "\t");
+                    Console.Write(row[column] + "\t");
                 }
                 Console.WriteLine();
             }
@@ -121,12 +121,46 @@ namespace AddressBookLinq
         /// <param name="state"></param>
         public void RetrieveContactsByState(string state)
         {
-            var stateResults = dataTable.AsEnumerable().Where(dr => dr.Field<string>("State") == state);
+            var stateResults = dataTable.AsEnumerable().Where(x => x.Field<string>("State") == state);
             foreach (DataRow row in stateResults)
             {
-                foreach (DataColumn col in dataTable.Columns)
+                foreach (DataColumn column in dataTable.Columns)
                 {
-                    Console.Write(row[col] + "\t");
+                    Console.Write(row[column] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Displays count of contacts city and state wise
+        /// </summary>
+        public void CountByCityAndState()
+        {
+            var countByCityAndState = from row in dataTable.AsEnumerable()
+                                      group row by new { City = row.Field<string>("City"), State = row.Field<string>("State") } into grp
+                                      select new
+                                      {
+                                          City = grp.Key.City,
+                                          State = grp.Key.State,
+                                          Count = grp.Count()
+                                      };
+            foreach (var row in countByCityAndState)
+            {
+                Console.WriteLine(row.City + "\t" + row.State + "\t" + row.Count);
+            }
+        }
+        /// <summary>
+        /// Retrieves Contacts alphabetically in a city
+        /// </summary>
+        /// <param name="city"></param>
+        public void SortContactsAlphabeticalyForACity(string city)
+        {
+            var records = dataTable.AsEnumerable().Where(x => x.Field<string>("city") == city).OrderBy(x => x.Field<string>("FirstName")).ThenBy(x => x.Field<string>("LastName"));
+            foreach (DataRow row in records)
+            {
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    Console.Write(row[column] + "\t");
                 }
                 Console.WriteLine();
             }
