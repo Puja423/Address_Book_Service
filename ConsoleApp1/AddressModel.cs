@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
-namespace ConsoleApp1
+namespace AddressBookLinq
 {
-    class AddressModel
+    class AddressBook
     {
         DataTable dataTable = new DataTable();
-
+        /// <summary>
+        /// DataTable created for storing contact information
+        /// </summary>
         public void CreateAddressBook()
         {
             dataTable.Columns.Add("FirstName", typeof(string));
@@ -16,17 +19,32 @@ namespace ConsoleApp1
             dataTable.Columns.Add("Address", typeof(string));
             dataTable.Columns.Add("City", typeof(string));
             dataTable.Columns.Add("State", typeof(string));
-            dataTable.Columns.Add("ZipCode", typeof(int));
-            dataTable.Columns.Add("PhoneNumber", typeof(int));
-            dataTable.Columns.Add("Email", typeof(string));
+            dataTable.Columns.Add("ZipCode", typeof(string));
+            dataTable.Columns.Add("PhoneNumber", typeof(string));
+            dataTable.Columns.Add("EmailID", typeof(string));
+            //Some pre existing contacts added
+            dataTable.Rows.Add("Sheldon", "Cooper", "Street 4", "Casper", "Texas", "525252", "9876778434", "cooper@yahoo.com");
+            dataTable.Rows.Add("Siddhi", "Seth", "Gopal Vihar", "Jabalpur", "Madhya Pradesh", "856985", "7458658925", "siddhiseth@gmail.com");
+            dataTable.Rows.Add("Priyanka", "Chopra", "Street 5", "NewYork", "NewYork", "520147", "5201118267", "priyanka@gmail.com");
+            dataTable.Rows.Add("Kareena", "Kapoor", "Bandra", "Mumbai", "Maharashtra", "852412", "7458965896", "kareena@yahoo.com");
+            dataTable.Rows.Add("Aditya", "Singh", "NavyNagar", "Vizag", "Andra Pradesh", "842563", "7849876734", "aditya@rediffmail.com");
+            dataTable.Rows.Add("John", "Parker", "Broadway", "NewYork", "NewYork", "10028", "4256387459", "parker@gmail.com");
+            dataTable.Rows.Add("Bugs", "Bunny", "GrandmaHome", "Tristate Area", "NewYork", "100001", "8987224534", "Bugs@gmail.com");
+            dataTable.Rows.Add("Captain", "Hook", "Sea Waters", "Island", "California", "452652", "6767986886", "hook@gmail.com");
+            dataTable.Rows.Add("Monica", "Gellar", "Richwood", "Manhattan", "NewYork", "652369", "9874523555", "monicagellar@yahoo.com");
         }
-        public void ContactDetails()
+        /// <summary>
+        /// Insert Contacts in a the addressBook
+        /// </summary>
+        /// <param name="contact"></param>
+        public void InsertContacts(Contact contact)
         {
-            dataTable.Rows.Add("Toshani", "Yadav", "Lotus", "Noida", "UP", "201310", "12345687","toshi@hmail.com");
-            dataTable.Rows.Add("Kaminee", "Uikey", "abcd", "Seoni", "MP", "455668", "154256", "ksmiskj@gmail.com");
-            dataTable.Rows.Add("Rakhi", "saraf", "qwert", "Sitamarhi", "Bihar", "26273898", "2782863", "ksjjklaL@gmail.com");
-            dataTable.Rows.Add("Sameer", "Chaudhary", "ahdff", "Bhopal", "MP", "6254443332", "3897487", "sameerfaltu@gmail.com");
+            dataTable.Rows.Add(contact.FirstName, contact.LastName, contact.Address, contact.City, contact.State, contact.ZipCode, contact.PhoneNumber, contact.Email);
+            Console.WriteLine("Contact inserted successfully");
         }
+        /// <summary>
+        /// Display address book data table
+        /// </summary>
         public void DisplayAddressBook()
         {
             foreach (DataRow row in dataTable.Rows)
@@ -68,6 +86,10 @@ namespace ConsoleApp1
                 Console.WriteLine("No Contact Found");
             }
         }
+        /// <summary>
+        /// Delete contact from table
+        /// </summary>
+        /// <param name="name"></param>
         public void DeleteContact(string name)
         {
             var deleteRow = dataTable.AsEnumerable().Where(a => a.Field<string>("FirstName").Equals(name)).FirstOrDefault();
@@ -75,6 +97,38 @@ namespace ConsoleApp1
             {
                 deleteRow.Delete();
                 Console.WriteLine("Contact deleted successfully");
+            }
+        }
+        /// <summary>
+        /// Retrieve contacts of a particular city
+        /// </summary>
+        /// <param name="city"></param>
+        public void RetrieveContactsByCity(string city)
+        {
+            var cityResults = dataTable.AsEnumerable().Where(dr => dr.Field<string>("City") == city);
+            foreach (DataRow row in cityResults)
+            {
+                foreach (DataColumn col in dataTable.Columns)
+                {
+                    Console.Write(row[col] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Retrieves contact of a particular state
+        /// </summary>
+        /// <param name="state"></param>
+        public void RetrieveContactsByState(string state)
+        {
+            var stateResults = dataTable.AsEnumerable().Where(dr => dr.Field<string>("State") == state);
+            foreach (DataRow row in stateResults)
+            {
+                foreach (DataColumn col in dataTable.Columns)
+                {
+                    Console.Write(row[col] + "\t");
+                }
+                Console.WriteLine();
             }
         }
     }
