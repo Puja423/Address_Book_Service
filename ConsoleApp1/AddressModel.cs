@@ -22,16 +22,18 @@ namespace AddressBookLinq
             dataTable.Columns.Add("ZipCode", typeof(string));
             dataTable.Columns.Add("PhoneNumber", typeof(string));
             dataTable.Columns.Add("EmailID", typeof(string));
+            dataTable.Columns.Add("ContactType", typeof(string));
+            dataTable.Columns.Add("BookName", typeof(string));
             //Some pre existing contacts added
-            dataTable.Rows.Add("Sheldon", "Cooper", "Street 4", "Casper", "Texas", "525252", "9876778434", "cooper@yahoo.com");
-            dataTable.Rows.Add("Siddhi", "Seth", "Gopal Vihar", "Jabalpur", "Madhya Pradesh", "856985", "7458658925", "siddhiseth@gmail.com");
-            dataTable.Rows.Add("Priyanka", "Chopra", "Street 5", "NewYork", "NewYork", "520147", "5201118267", "priyanka@gmail.com");
-            dataTable.Rows.Add("Kareena", "Kapoor", "Bandra", "Mumbai", "Maharashtra", "852412", "7458965896", "kareena@yahoo.com");
-            dataTable.Rows.Add("Aditya", "Singh", "NavyNagar", "Vizag", "Andra Pradesh", "842563", "7849876734", "aditya@rediffmail.com");
-            dataTable.Rows.Add("John", "Parker", "Broadway", "NewYork", "NewYork", "10028", "4256387459", "parker@gmail.com");
-            dataTable.Rows.Add("Bugs", "Bunny", "GrandmaHome", "Tristate Area", "NewYork", "100001", "8987224534", "Bugs@gmail.com");
-            dataTable.Rows.Add("Captain", "Hook", "Sea Waters", "Island", "California", "452652", "6767986886", "hook@gmail.com");
-            dataTable.Rows.Add("Monica", "Gellar", "Richwood", "Manhattan", "NewYork", "652369", "9874523555", "monicagellar@yahoo.com");
+            dataTable.Rows.Add("Sheldon", "Cooper", "Street 4", "Casper", "Texas", "525252", "9876778434", "cooper@yahoo.com", "Friends", "General");
+            dataTable.Rows.Add("Siddhi", "Seth", "Gopal Vihar", "Jabalpur", "Madhya Pradesh", "856985", "7458658925", "siddhiseth@gmail.com", "Family", "General");
+            dataTable.Rows.Add("Priyanka", "Chopra", "Street 5", "NewYork", "NewYork", "520147", "5201118267", "priyanka@gmail.com", "Office", "Professional");
+            dataTable.Rows.Add("Kareena", "Kapoor", "Bandra", "Mumbai", "Maharashtra", "852412", "7458965896", "kareena@yahoo.com", "Friends", "General");
+            dataTable.Rows.Add("Aditya", "Singh", "NavyNagar", "Vizag", "Andra Pradesh", "842563", "7849876734", "aditya@rediffmail.com", "Family", "General");
+            dataTable.Rows.Add("John", "Parker", "Broadway", "NewYork", "NewYork", "10028", "4256387459", "parker@gmail.com", "Office", "Professional");
+            dataTable.Rows.Add("Bugs", "Bunny", "GrandmaHome", "Tristate Area", "NewYork", "100001", "8987224534", "Bugs@gmail.com", "Family", "General");
+            dataTable.Rows.Add("Captain", "Hook", "Sea Waters", "Island", "California", "452652", "6767986886", "hook@gmail.com", "Friends", "General");
+            dataTable.Rows.Add("Monica", "Gellar", "Richwood", "Manhattan", "NewYork", "652369", "9874523555", "monicagellar@yahoo.com", "Office", "Professional");
         }
         /// <summary>
         /// Insert Contacts in a the addressBook
@@ -39,7 +41,7 @@ namespace AddressBookLinq
         /// <param name="contact"></param>
         public void InsertContacts(Contact contact)
         {
-            dataTable.Rows.Add(contact.FirstName, contact.LastName, contact.Address, contact.City, contact.State, contact.ZipCode, contact.PhoneNumber, contact.Email);
+            dataTable.Rows.Add(contact.FirstName, contact.LastName, contact.Address, contact.City, contact.State, contact.ZipCode, contact.PhoneNumber, contact.Email, contact.ContactType, contact.BookName);
             Console.WriteLine("Contact inserted successfully");
         }
         /// <summary>
@@ -49,9 +51,9 @@ namespace AddressBookLinq
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                foreach (DataColumn col in dataTable.Columns)
+                foreach (DataColumn column in dataTable.Columns)
                 {
-                    Console.Write(row[col] + "\t");
+                    Console.Write(row[column] + "\t");
                 }
                 Console.WriteLine();
             }
@@ -67,7 +69,9 @@ namespace AddressBookLinq
         /// <param name="zipcode"></param>
         /// <param name="phoneNumber"></param>
         /// <param name="email"></param>
-        public void EditContact(string firstName, string lastName, string address, string city, string state, string zipcode, string phoneNumber, string email)
+        /// <param name="contactType"></param>
+        /// <param name="bookName"></param>
+        public void EditContact(string firstName, string lastName, string address, string city, string state, string zipcode, string phoneNumber, string email, string contactType, string bookName)
         {
             var recordedData = dataTable.AsEnumerable().Where(x => x.Field<string>("FirstName") == firstName).FirstOrDefault();
             if (recordedData != null)
@@ -78,7 +82,9 @@ namespace AddressBookLinq
                 recordedData.SetField("State", state);
                 recordedData.SetField("ZipCode", zipcode);
                 recordedData.SetField("EmailID", email);
-                recordedData.SetField("State", state);
+                recordedData.SetField("PhoneNumber", phoneNumber);
+                recordedData.SetField("ContactType", contactType);
+                recordedData.SetField("BookName", bookName);
                 Console.WriteLine("Contact edited successfully");
             }
             else

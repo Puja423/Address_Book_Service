@@ -1,92 +1,174 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
 
 namespace AddressBookLinq
 {
-    class Program
+    class AddressBook
     {
-        static void Main(string[] args)
+        DataTable dataTable = new DataTable();
+        /// <summary>
+        /// DataTable created for storing contact information
+        /// </summary>
+        public void CreateAddressBook()
         {
-            Console.WriteLine("Welcome to address book system");
-            AddressBook book = new AddressBook();
-            int loop = 1;
-            book.CreateAddressBook();
-            while (loop == 1)
+            dataTable.Columns.Add("FirstName", typeof(string));
+            dataTable.Columns.Add("LastName", typeof(string));
+            dataTable.Columns.Add("Address", typeof(string));
+            dataTable.Columns.Add("City", typeof(string));
+            dataTable.Columns.Add("State", typeof(string));
+            dataTable.Columns.Add("ZipCode", typeof(string));
+            dataTable.Columns.Add("PhoneNumber", typeof(string));
+            dataTable.Columns.Add("EmailID", typeof(string));
+            dataTable.Columns.Add("ContactType", typeof(string));
+            dataTable.Columns.Add("BookName", typeof(string));
+            //Some pre existing contacts added
+            dataTable.Rows.Add("Sheldon", "Cooper", "Street 4", "Casper", "Texas", "525252", "9876778434", "cooper@yahoo.com", "Friends", "General");
+            dataTable.Rows.Add("Siddhi", "Seth", "Gopal Vihar", "Jabalpur", "Madhya Pradesh", "856985", "7458658925", "siddhiseth@gmail.com", "Family", "General");
+            dataTable.Rows.Add("Priyanka", "Chopra", "Street 5", "NewYork", "NewYork", "520147", "5201118267", "priyanka@gmail.com", "Office", "Professional");
+            dataTable.Rows.Add("Kareena", "Kapoor", "Bandra", "Mumbai", "Maharashtra", "852412", "7458965896", "kareena@yahoo.com", "Friends", "General");
+            dataTable.Rows.Add("Aditya", "Singh", "NavyNagar", "Vizag", "Andra Pradesh", "842563", "7849876734", "aditya@rediffmail.com", "Family", "General");
+            dataTable.Rows.Add("John", "Parker", "Broadway", "NewYork", "NewYork", "10028", "4256387459", "parker@gmail.com", "Office", "Professional");
+            dataTable.Rows.Add("Bugs", "Bunny", "GrandmaHome", "Tristate Area", "NewYork", "100001", "8987224534", "Bugs@gmail.com", "Family", "General");
+            dataTable.Rows.Add("Captain", "Hook", "Sea Waters", "Island", "California", "452652", "6767986886", "hook@gmail.com", "Friends", "General");
+            dataTable.Rows.Add("Monica", "Gellar", "Richwood", "Manhattan", "NewYork", "652369", "9874523555", "monicagellar@yahoo.com", "Office", "Professional");
+        }
+        /// <summary>
+        /// Insert Contacts in a the addressBook
+        /// </summary>
+        /// <param name="contact"></param>
+        public void InsertContacts(Contact contact)
+        {
+            dataTable.Rows.Add(contact.FirstName, contact.LastName, contact.Address, contact.City, contact.State, contact.ZipCode, contact.PhoneNumber, contact.Email, contact.ContactType, contact.BookName);
+            Console.WriteLine("Contact inserted successfully");
+        }
+        /// <summary>
+        /// Display address book data table
+        /// </summary>
+        public void DisplayAddressBook()
+        {
+            foreach (DataRow row in dataTable.Rows)
             {
-                Console.WriteLine("Make choice according to your desired operation \n1. Display Address book \n2. Insert Contact \n3. Edit Contact \n4. Delete Contact \n5. Retrieve contacts by city \n6. Retrieve Contacts by state \n7. Retrieve count of contacts by city and state \n8. Display contacts alphabetically for a city \n9. Exit");
-                int choice = Convert.ToInt32(Console.ReadLine());
-                switch (choice)
+                foreach (DataColumn column in dataTable.Columns)
                 {
-                    case 1:
-                        book.DisplayAddressBook();
-                        break;
-                    case 2:
-                        Contact contact = new Contact();
-                        Console.WriteLine("Enter the person details to be added in the address book");
-                        Console.WriteLine("First Name");
-                        contact.FirstName = Console.ReadLine();
-                        Console.WriteLine("Last Name");
-                        contact.LastName = Console.ReadLine();
-                        Console.WriteLine("Address");
-                        contact.Address = Console.ReadLine();
-                        Console.WriteLine("City");
-                        contact.City = Console.ReadLine();
-                        Console.WriteLine("State");
-                        contact.State = Console.ReadLine();
-                        Console.WriteLine("Zip code");
-                        contact.ZipCode = Console.ReadLine();
-                        Console.WriteLine("Phone Number");
-                        contact.PhoneNumber = Console.ReadLine();
-                        Console.WriteLine("Email");
-                        contact.Email = Console.ReadLine();
-                        book.InsertContacts(contact);
-                        break;
-                    case 3:
-                        Console.WriteLine("Enter the person details to be added in the address book");
-                        Console.WriteLine("First Name");
-                        string FirstName = Console.ReadLine();
-                        Console.WriteLine("Last Name");
-                        string LastName = Console.ReadLine();
-                        Console.WriteLine("Address");
-                        string Address = Console.ReadLine();
-                        Console.WriteLine("City");
-                        string City = Console.ReadLine();
-                        Console.WriteLine("State");
-                        string State = Console.ReadLine();
-                        Console.WriteLine("Zip code");
-                        string ZipCode = Console.ReadLine();
-                        Console.WriteLine("Phone Number");
-                        string PhoneNumber = Console.ReadLine();
-                        Console.WriteLine("Email");
-                        string Email = Console.ReadLine();
-                        book.EditContact(FirstName, LastName, Address, City, State, ZipCode, PhoneNumber, Email);
-                        break;
-                    case 4:
-                        Console.WriteLine("Enter FirstName of contact to be deleted");
-                        string name = Console.ReadLine();
-                        book.DeleteContact(name);
-                        break;
-                    case 5:
-                        Console.WriteLine("Enter City");
-                        string city = Console.ReadLine();
-                        book.RetrieveContactsByCity(city);
-                        break;
-                    case 6:
-                        Console.WriteLine("Enter State");
-                        string state = Console.ReadLine();
-                        book.RetrieveContactsByState(state);
-                        break;
-                    case 7:
-                        book.CountByCityAndState();
-                        break;
-                    case 8:
-                        Console.WriteLine("Enter City");
-                        string cityName = Console.ReadLine();
-                        book.SortContactsAlphabeticalyForACity(cityName);
-                        break;
-                    case 9:
-                        loop = 0;
-                        break;
+                    Console.Write(row[column] + "\t");
                 }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Edits the existing contact in datatable
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="address"></param>
+        /// <param name="city"></param>
+        /// <param name="state"></param>
+        /// <param name="zipcode"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="email"></param>
+        /// <param name="contactType"></param>
+        /// <param name="bookName"></param>
+        public void EditContact(string firstName, string lastName, string address, string city, string state, string zipcode, string phoneNumber, string email, string contactType, string bookName)
+        {
+            var recordedData = dataTable.AsEnumerable().Where(x => x.Field<string>("FirstName") == firstName).FirstOrDefault();
+            if (recordedData != null)
+            {
+                recordedData.SetField("LastName", lastName);
+                recordedData.SetField("Address", address);
+                recordedData.SetField("City", city);
+                recordedData.SetField("State", state);
+                recordedData.SetField("ZipCode", zipcode);
+                recordedData.SetField("EmailID", email);
+                recordedData.SetField("PhoneNumber", phoneNumber);
+                recordedData.SetField("ContactType", contactType);
+                recordedData.SetField("BookName", bookName);
+                Console.WriteLine("Contact edited successfully");
+            }
+            else
+            {
+                Console.WriteLine("No Contact Found");
+            }
+        }
+        /// <summary>
+        /// Delete contact from table
+        /// </summary>
+        /// <param name="name"></param>
+        public void DeleteContact(string name)
+        {
+            var deleteRow = dataTable.AsEnumerable().Where(x => x.Field<string>("FirstName").Equals(name)).FirstOrDefault();
+            if (deleteRow != null)
+            {
+                deleteRow.Delete();
+                Console.WriteLine("Contact deleted successfully");
+            }
+        }
+        /// <summary>
+        /// Retrieve contacts of a particular city
+        /// </summary>
+        /// <param name="city"></param>
+        public void RetrieveContactsByCity(string city)
+        {
+            var cityResults = dataTable.AsEnumerable().Where(x => x.Field<string>("City") == city);
+            foreach (DataRow row in cityResults)
+            {
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    Console.Write(row[column] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Retrieves contact of a particular state
+        /// </summary>
+        /// <param name="state"></param>
+        public void RetrieveContactsByState(string state)
+        {
+            var stateResults = dataTable.AsEnumerable().Where(x => x.Field<string>("State") == state);
+            foreach (DataRow row in stateResults)
+            {
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    Console.Write(row[column] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Displays count of contacts city and state wise
+        /// </summary>
+        public void CountByCityAndState()
+        {
+            var countByCityAndState = from row in dataTable.AsEnumerable()
+                                      group row by new { City = row.Field<string>("City"), State = row.Field<string>("State") } into grp
+                                      select new
+                                      {
+                                          City = grp.Key.City,
+                                          State = grp.Key.State,
+                                          Count = grp.Count()
+                                      };
+            foreach (var row in countByCityAndState)
+            {
+                Console.WriteLine(row.City + "\t" + row.State + "\t" + row.Count);
+            }
+        }
+        /// <summary>
+        /// Retrieves Contacts alphabetically in a city
+        /// </summary>
+        /// <param name="city"></param>
+        public void SortContactsAlphabeticalyForACity(string city)
+        {
+            var records = dataTable.AsEnumerable().Where(x => x.Field<string>("city") == city).OrderBy(x => x.Field<string>("FirstName")).ThenBy(x => x.Field<string>("LastName"));
+            foreach (DataRow row in records)
+            {
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    Console.Write(row[column] + "\t");
+                }
+                Console.WriteLine();
             }
         }
     }
